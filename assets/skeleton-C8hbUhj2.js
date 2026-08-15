@@ -1,1 +1,0 @@
-import{ao as t,a as n,j as s}from"./index-Bes8XKsb.js";function a(...e){return t(n(e))}function o({className:e}){return s.jsx("div",{className:a("animate-pulse rounded bg-white/[0.06]",e)})}export{o as S};
