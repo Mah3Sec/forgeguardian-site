@@ -81,7 +81,7 @@ const qc = new QueryClient({
 
 function Router({ path }: { path: string }) {
   switch (path) {
-    case '/':            return <ErrorBoundary><DashboardPage /></ErrorBoundary>;
+    case '/dashboard':   return <ErrorBoundary><DashboardPage /></ErrorBoundary>;
     case '/scan':        return <ErrorBoundary><ScanPage /></ErrorBoundary>;
     case '/advisory':    return <ErrorBoundary><AdvisoryPage /></ErrorBoundary>;
     case '/sbom':        return <ErrorBoundary><SBOMPage /></ErrorBoundary>;
@@ -109,7 +109,7 @@ function Router({ path }: { path: string }) {
     case '/api-docs':    return <ErrorBoundary><ApiDocsPage /></ErrorBoundary>;
     case '/attack-surface': return <ErrorBoundary><AttackSurfacePage /></ErrorBoundary>;
     case '/integrations':   return <ErrorBoundary><IntegrationsPage /></ErrorBoundary>;
-    default:             return <ErrorBoundary><DashboardPage /></ErrorBoundary>;
+    default:             return <ErrorBoundary><DashboardPage /></ErrorBoundary>;  // unknown dashboard routes fall back to overview
   }
 }
 
@@ -132,19 +132,12 @@ function AppShell({ path, setPath }: { path: string; setPath: (p: string) => voi
     () => localStorage.getItem('fg_onboarded') === 'true'
   );
 
-  if (authStatus.isLoading) {
-    return <div style={{ minHeight: '100vh', background: 'var(--bg-base)' }} />;
-  }
-
-  // /welcome and /enterprise are always-reachable public pages — independent
-  // of whether auth is configured, so self-hosted no-auth instances still
-  // have real marketing entry points instead of landing straight on the
-  // (empty, pre-scan) dashboard.
-  if (path === '/welcome') {
+  // Public pages render immediately — no auth check needed.
+  if (path === '/' || path === '/welcome') {
     return (
       <Suspense fallback={<RouteFallback />}>
         <PitchPage
-          onLoggedIn={() => { qc.invalidateQueries({ queryKey: ['auth-me'] }); setPath('/'); }}
+          onLoggedIn={() => { qc.invalidateQueries({ queryKey: ['auth-me'] }); setPath('/dashboard'); }}
           onNavigateEnterprise={() => setPath('/enterprise')}
         />
       </Suspense>
@@ -154,9 +147,13 @@ function AppShell({ path, setPath }: { path: string; setPath: (p: string) => voi
   if (path === '/enterprise') {
     return (
       <Suspense fallback={<RouteFallback />}>
-        <EnterprisePage onNavigateHome={() => setPath('/welcome')} />
+        <EnterprisePage onNavigateHome={() => setPath('/')} />
       </Suspense>
     );
+  }
+
+  if (authStatus.isLoading) {
+    return <div style={{ minHeight: '100vh', background: 'var(--bg-base)' }} />;
   }
 
   const gated = !authStatus.isError

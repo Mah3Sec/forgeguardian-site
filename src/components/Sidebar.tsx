@@ -18,7 +18,7 @@ export interface NavSection {
   items: NavItem[];
 }
 
-export const STANDALONE: NavItem = { label: 'Dashboard', icon: LayoutDashboard, path: '/' };
+export const STANDALONE: NavItem = { label: 'Dashboard', icon: LayoutDashboard, path: '/dashboard' };
 
 export const NAV_SECTIONS: NavSection[] = [
   {
