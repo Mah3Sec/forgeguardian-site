@@ -1,6 +1,6 @@
 // Typed API client for the ForgeGuardian REST API
 
-const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
+const BASE = import.meta.env.VITE_API_URL ?? '';
 
 // Optional API key — set VITE_API_KEY in .env to enable auth.
 const API_KEY = import.meta.env.VITE_API_KEY ?? '';
