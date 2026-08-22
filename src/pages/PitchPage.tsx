@@ -43,14 +43,12 @@ const FREE_PRO_ROWS: FreeProRow[] = [
   { feature: 'fgctl intel new/validate/test/update',                       free: true,  pro: true },
   { feature: 'Policy-as-code enforcement',                                 free: true,  pro: true },
   { feature: 'Self-hostable + airgap-compatible',                         free: true,  pro: true },
-  { feature: 'VS Code inline diagnostics + hover cards',                  free: true,  pro: true },
   { feature: 'Basic dashboard',                                           free: true,  pro: true },
   { feature: 'Dashboard: allowlist, advisory, monitor, alerts, agents, projects', free: true,  pro: true },
   { feature: 'fgctl advisory — AI security advisory',                    free: true,  pro: true },
   { feature: 'fgctl patch — AI autonomous patching',                     free: true,  pro: true },
   { feature: 'fgctl monitor — continuous monitoring',                     free: true,  pro: true },
   { feature: 'Dashboard: webhooks (config UI)',                          free: false, pro: true },
-  { feature: 'VS Code full sidebar + auto-scan on save',                  free: false, pro: true },
   { feature: 'Team management + RBAC',                                    free: false, pro: true },
   { feature: 'SLA + priority support',                                    free: false, pro: true },
   { feature: 'Cloud-hosted option',                                       free: false, pro: true },
@@ -170,9 +168,9 @@ export function PitchPage({ onLoggedIn, onNavigateEnterprise }: PitchPageProps) 
           (scrolled ? 'border-border-color' : 'border-transparent')
         }
       >
-        <div className="flex items-center gap-2 min-w-0 shrink">
-          <img src="/logo.png" alt="ForgeGuardian" className="h-7 shrink-0" />
-          <span className="font-mono text-[0.95rem] font-bold truncate">ForgeGuardian</span>
+        <div className="flex items-center gap-2.5 min-w-0 shrink">
+          <img src="/logo-icon.png" alt="ForgeGuardian" className="shrink-0" style={{ height: 36, objectFit: 'contain' }} />
+          <span className="text-[1.05rem] font-semibold tracking-tight text-text-primary whitespace-nowrap">ForgeGuardian</span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <a

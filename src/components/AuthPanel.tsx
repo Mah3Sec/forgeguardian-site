@@ -37,9 +37,9 @@ export function AuthPanel({ onLoggedIn }: AuthPanelProps) {
         <div className="pointer-events-none absolute inset-0">
           <NetworkGraph mode="ambient" opacity={0.18} width={640} height={560} />
         </div>
-        <div className="relative z-10 flex items-center gap-2.5">
-          <img src="/logo.png" alt="ForgeGuardian" className="h-8 drop-shadow-[0_0_8px_rgba(37,99,235,0.6)]" />
-          <span className="font-mono text-lg font-bold">ForgeGuardian</span>
+        <div className="relative z-10 flex items-center gap-3">
+          <img src="/logo-icon.png" alt="ForgeGuardian" className="drop-shadow-[0_0_8px_rgba(37,99,235,0.6)]" style={{ height: 48, objectFit: 'contain' }} />
+          <span className="text-xl font-semibold tracking-tight text-white drop-shadow-[0_0_8px_rgba(37,99,235,0.4)]">ForgeGuardian</span>
         </div>
         <div className="relative z-10">
           <p className="text-2xl font-semibold leading-snug">
@@ -104,9 +104,18 @@ export function AuthPanel({ onLoggedIn }: AuthPanelProps) {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-[0.7rem] text-text-muted">
-            Your workspace is protected with encrypted authentication.
-          </p>
+          <div className="mt-6 rounded-md border border-border-color bg-surface-hover px-3 py-2.5">
+            <p className="text-[0.7rem] font-mono text-text-secondary">
+              First time? Set credentials with:
+            </p>
+            <pre className="mt-1 select-all text-[0.65rem] text-text-muted leading-relaxed">
+{`fgctl setup        # interactive
+# or set env vars:
+FG_ADMIN_EMAIL=you@example.com
+FG_ADMIN_PASSWORD=your-password
+FG_SESSION_SECRET=$(openssl rand -hex 32)`}
+            </pre>
+          </div>
         </div>
       </div>
     </div>
