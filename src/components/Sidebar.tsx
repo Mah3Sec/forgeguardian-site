@@ -2,7 +2,7 @@ import {
   Shield, Search, RefreshCw, HardDrive, Bot, Activity, GitBranch, Bell,
   FolderOpen, Package, FileText, ListFilter, KeyRound, Download, Webhook,
   GitMerge, LayoutDashboard, ChevronLeft, ChevronRight, FileCheck, PenTool,
-  BookOpen, LogOut, Network, Puzzle, Server, Globe2, Building2, Sparkles, Cpu,
+  LogOut, Network, Puzzle, Globe2, Building2, Sparkles, Cpu,
 } from 'lucide-react';
 import { useUIStore } from '../store/ui';
 import { cn } from './ui/utils';
@@ -71,8 +71,6 @@ export const NAV_SECTIONS: NavSection[] = [
   {
     section: 'RESOURCES',
     items: [
-      { label: 'Developer Docs',      icon: BookOpen,     path: '/docs' },
-      { label: 'API Reference',       icon: Server,       path: '/api-docs' },
       { label: 'About ForgeGuardian', icon: Globe2,       path: '/welcome' },
       { label: 'Enterprise',          icon: Building2,    path: '/enterprise' },
     ],
@@ -124,14 +122,12 @@ export function Sidebar({ current, onNavigate, onLogout }: SidebarProps) {
       >
         {/* Logo image — collapsed: icon only, expanded: full logo */}
         <img
-          src="/logo.png"
+          src="/logo-icon.png"
           alt="ForgeGuardian"
-          className="shrink-0 transition-[height,width] duration-200"
+          className="shrink-0 transition-all duration-200"
           style={{
-            height: sidebarOpen ? 32 : 30,
-            width: sidebarOpen ? 'auto' : 30,
-            objectFit: sidebarOpen ? 'contain' : 'cover',
-            objectPosition: 'left center',
+            height: sidebarOpen ? 34 : 30,
+            objectFit: 'contain',
           }}
         />
         {sidebarOpen && (

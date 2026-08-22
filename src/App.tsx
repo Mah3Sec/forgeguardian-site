@@ -56,8 +56,6 @@ const ExportsPage           = lazy(() => import('./pages/ExportsPage').then(m =>
 const CiCdPage              = lazy(() => import('./pages/CiCdPage').then(m => ({ default: m.CiCdPage })));
 const ProvenancePage        = lazy(() => import('./pages/ProvenancePage').then(m => ({ default: m.ProvenancePage })));
 const IntelAuthoringPage    = lazy(() => import('./pages/IntelAuthoringPage').then(m => ({ default: m.IntelAuthoringPage })));
-const DocsPage              = lazy(() => import('./pages/DocsPage').then(m => ({ default: m.DocsPage })));
-const ApiDocsPage           = lazy(() => import('./pages/ApiDocsPage').then(m => ({ default: m.ApiDocsPage })));
 const PitchPage             = lazy(() => import('./pages/PitchPage').then(m => ({ default: m.PitchPage })));
 const EnterprisePage        = lazy(() => import('./pages/EnterprisePage').then(m => ({ default: m.EnterprisePage })));
 const OnboardingPage        = lazy(() => import('./pages/OnboardingPage').then(m => ({ default: m.OnboardingPage })));
@@ -105,8 +103,6 @@ function Router({ path }: { path: string }) {
     case '/cicd':        return <ErrorBoundary><CiCdPage /></ErrorBoundary>;
     case '/provenance':  return <ErrorBoundary><ProvenancePage /></ErrorBoundary>;
     case '/intel/new':   return <ErrorBoundary><IntelAuthoringPage /></ErrorBoundary>;
-    case '/docs':        return <ErrorBoundary><DocsPage /></ErrorBoundary>;
-    case '/api-docs':    return <ErrorBoundary><ApiDocsPage /></ErrorBoundary>;
     case '/attack-surface': return <ErrorBoundary><AttackSurfacePage /></ErrorBoundary>;
     case '/integrations':   return <ErrorBoundary><IntegrationsPage /></ErrorBoundary>;
     default:             return <ErrorBoundary><DashboardPage /></ErrorBoundary>;  // unknown dashboard routes fall back to overview
@@ -152,13 +148,16 @@ function AppShell({ path, setPath }: { path: string; setPath: (p: string) => voi
     );
   }
 
-  if (authStatus.isLoading) {
-    return <div style={{ minHeight: '100vh', background: 'var(--bg-base)' }} />;
+  // Auth gate — deny by default. Never render the dashboard before we have
+  // confirmed the user is authenticated (or that auth is disabled).
+  const authData = authStatus.data;
+
+  if (!authData && (authStatus.isLoading || authStatus.isFetching)) {
+    return <RouteFallback />;
   }
 
-  const gated = !authStatus.isError
-    && authStatus.data?.auth_enabled === true
-    && authStatus.data?.authenticated === false;
+  const gated = (authData?.auth_enabled === true && authData?.authenticated === false)
+    || (!authData && authStatus.isError);
 
   if (gated) {
     return (
@@ -174,7 +173,7 @@ function AppShell({ path, setPath }: { path: string; setPath: (p: string) => voi
   // Onboarding only makes sense right after a real login — when auth is
   // disabled (today's open self-hosted default, or /auth/me unreachable),
   // there's no login moment to follow, so go straight to the dashboard.
-  const authEnabled = !authStatus.isError && authStatus.data?.auth_enabled === true;
+  const authEnabled = authData?.auth_enabled === true;
 
   if (authEnabled && !onboarded) {
     return (
@@ -199,7 +198,9 @@ function AppShell({ path, setPath }: { path: string; setPath: (p: string) => voi
           onNavigate={setPath}
           onLogout={async () => {
             await logout();
+            qc.setQueryData(['auth-me'], null);
             qc.invalidateQueries({ queryKey: ['auth-me'] });
+            setPath('/');
           }}
         />
         <main className="flex-1 overflow-auto">
